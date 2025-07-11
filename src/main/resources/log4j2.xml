@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+6个优先级从高到低依次为：OFF、FATAL、ERROR、WARN、INFO、DEBUG、TRACE、 ALL。
+如果设置优先级为WARN，那么OFF、FATAL、ERROR、WARN 4个级别的log能正常输出
+设置为OFF 表示不记录log4j2本身的日志，
+-->
+<!-- status：用来指定log4j本身的打印日志级别,monitorInterval:指定log4j自动重新配置的监测间隔时间（单位：秒） -->
+<configuration status="OFF" monitorInterval="120">
+    <!--全局属性-->
+    <Properties>
+        <Property name="APP_NAME">excel-buddy</Property>
+        <!--设置日志输出格式-->
+        <Property name="PATTERN_FORMAT">%d{yyyy-MM-dd HH:mm:ss.SSS} %level [%C{1} %M %L] [%thread] [logId:%X{logId}] [traceId:%X{traceId}] - %msg%xEx%n</Property>
+    </Properties>
+    <appenders>
+        <Console name="CONSOLE" target="SYSTEM_OUT">
+            <PatternLayout pattern="${PATTERN_FORMAT}"/>
+        </Console>
+    </appenders>
+    <loggers>
+        <AsyncLogger name="AsyncLogger" level="ERROR" includeLocation="true">
+            <appender-ref ref="CONSOLE" />
+        </AsyncLogger>
+
+        <root level="ERROR">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+        <Logger name="com.funny" level="INFO"/>
+        <Logger name="com.fasterxml.jackson" level="DEBUG"/>
+        <Logger name="org.springframework" level="INFO"/>
+        <Logger name="org.springframework.cache" level="ALL"/>
+        <Logger name="org.springframework.web" level="INFO"/>
+        <Logger name="org.springframework.web.servlet.mvc" level="INFO"/>
+    </loggers>
+</configuration>

@@ -1,0 +1,67 @@
+buildscript {
+    ext {
+        springBootVersion = '2.3.12.RELEASE'
+        springCloudVersion = 'Hoxton.SR12'
+        cloudAlibabaVersion = '2.2.7.RELEASE'
+    }
+    repositories {
+        maven { url "https://maven.aliyun.com/nexus/content/groups/public/" }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+allprojects {
+    configurations {
+        compile.exclude module: 'spring-boot-starter-logging'
+        compile.exclude module: 'logback-classic'
+        compile.exclude module: 'logback-core'
+    }
+    configurations.all {
+        resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+    }
+
+    ext['log4j2.version'] = '2.16.0'
+
+    apply plugin: 'java'
+    apply plugin: 'war'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'maven-publish'
+
+    group = 'com.funny'
+    version = '1.0.0-SNAPSHOT'
+    sourceCompatibility = '1.8'
+
+    repositories {
+        maven { url "https://maven.aliyun.com/nexus/content/groups/public/" }
+        maven { url "https://repo.spring.io/milestone" }
+    }
+
+
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.boot:spring-boot-starter-log4j2'
+
+        implementation 'com.google.guava:guava:25.1-jre'
+
+        implementation "org.apache.poi:poi:4.1.2"
+        implementation "org.apache.poi:poi-ooxml:4.1.2"
+
+        implementation 'com.github.pagehelper:pagehelper-spring-boot-starter:1.2.13'
+
+        implementation "com.alibaba:fastjson:1.2.75"
+
+        implementation('com.lmax:disruptor:3.3.6')
+
+        testImplementation platform('org.junit:junit-bom:5.9.1')
+        testImplementation 'org.junit.jupiter:junit-jupiter'
+    }
+
+    task sourceJar(type: Jar) {
+        from sourceSets.main.allJava
+        classifier "sources"
+    }
+
+}
